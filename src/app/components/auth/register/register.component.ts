@@ -4,6 +4,11 @@ import { Form, FormBuilder, FormGroup, Validators  } from '@angular/forms';
 import { switchAll } from 'rxjs/operators';
 import Swal from 'sweetalert2';
 import { AuthService } from 'src/app/services/auth.service';
+import { Store } from '@ngrx/store';
+import { AppState } from 'src/app/app.reducer';
+import { Subscription } from 'rxjs';
+
+import * as ui from '../../../shared/ui.actions'
 
 @Component({
   selector: 'app-register',
@@ -13,9 +18,12 @@ import { AuthService } from 'src/app/services/auth.service';
 export class RegisterComponent implements OnInit {
 
   registerForm: FormGroup;
+  cargando: boolean = false;
+  uiSubscription: Subscription;
 
   constructor(  private fb: FormBuilder,
                 private authService: AuthService,
+                private store: Store<AppState>,
                 private router: Router) { }
 
   ngOnInit(): void {
@@ -27,6 +35,12 @@ export class RegisterComponent implements OnInit {
 
     })
 
+    this.uiSubscription = this.store.select('ui').subscribe(ui => this.cargando = ui.isLoading);
+
+  }
+
+  ngOnDestroy(): void {
+    this.uiSubscription.unsubscribe();    
   }
 
 
@@ -34,25 +48,26 @@ export class RegisterComponent implements OnInit {
 
     if ( this.registerForm.invalid ) { return; }
     
-    Swal.fire({
+    /*Swal.fire({
       title: 'Espere por favor',
       onBeforeOpen: () => {
         Swal.showLoading()
       }
-    });
-
+    });*/
+    
+    this.store.dispatch(ui.isLoading());
 
     const { nombre, email, password } = this.registerForm.value;
 
     this.authService.crearUsuario( nombre, email, password )
       .then( credenciales => {
         console.log(credenciales);
-
-        Swal.close();
+        this.store.dispatch(ui.stopLoading());
 
         this.router.navigate(['/']);
       })
       .catch( err => {
+        this.store.dispatch(ui.stopLoading());
         Swal.fire({
           icon: 'error',
           title: 'Oops...',
