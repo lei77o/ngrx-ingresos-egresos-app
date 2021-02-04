@@ -1,5 +1,15 @@
-import { createAction } from '@ngrx/store';
+import { Action } from '@ngrx/store';
 
-export const isLoading = createAction('[UI Component] Is Loading');
 
-export const stopLoading = createAction('[UI Component] Stop Loading');
+export const ACTIVAR_LOADING = '[UI Loading] Cargando...';
+export const DESACTIVAR_LOADING = '[UI Loading] Fin de carga...';
+
+export class ActivarLoadingAction implements Action {
+    readonly type = ACTIVAR_LOADING;
+}
+
+export class DesactivarLoadingAction implements Action {
+    readonly type = DESACTIVAR_LOADING;
+}
+
+export type acciones = ActivarLoadingAction | DesactivarLoadingAction;
