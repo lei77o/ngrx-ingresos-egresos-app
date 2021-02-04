@@ -10,12 +10,12 @@ import { AppRoutingModule } from './app-routing.module';
 import { ReactiveFormsModule } from '@angular/forms';
 
 import { AppComponent } from './app.component';
-import { LoginComponent } from './components/auth/login/login.component';
-import { RegisterComponent } from './components/auth/register/register.component';
-import { DashboardComponent } from './components/dashboard/dashboard.component';
-import { IngresoEgresoComponent } from './components/ingreso-egreso/ingreso-egreso.component';
-import { EstadisticaComponent } from './components/ingreso-egreso/estadistica/estadistica.component';
-import { DetalleComponent } from './components/ingreso-egreso/detalle/detalle.component';
+import { LoginComponent } from './auth/login/login.component';
+import { RegisterComponent } from './auth/register/register.component';
+import { DashboardComponent } from './dashboard/dashboard.component';
+import { IngresoEgresoComponent } from './ingreso-egreso/ingreso-egreso.component';
+import { EstadisticaComponent } from './ingreso-egreso/estadistica/estadistica.component';
+import { DetalleComponent } from './ingreso-egreso/detalle/detalle.component';
 import { FooterComponent } from './shared/footer/footer.component';
 import { NavbarComponent } from './shared/navbar/navbar.component';
 import { SidebarComponent } from './shared/sidebar/sidebar.component';
@@ -25,6 +25,9 @@ import { environment } from 'src/environments/environment';
 import { StoreModule } from '@ngrx/store';
 import { appReducers } from './app.reducer';
 import { StoreDevtoolsModule } from '@ngrx/store-devtools';
+
+//Charts
+import { ChartsModule } from 'ng2-charts';
 
 
 @NgModule({
@@ -52,6 +55,7 @@ import { StoreDevtoolsModule } from '@ngrx/store-devtools';
       maxAge: 25, // Retains last 25 states
       logOnly: environment.production, // Restrict extension to log-only mode
     }),
+    ChartsModule
     
   ],
   providers: [],

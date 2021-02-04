@@ -8,7 +8,7 @@ import Swal from 'sweetalert2';
 
 import { Store } from '@ngrx/store';
 import { AppState } from 'src/app/app.reducer';
-import * as ui from '../../../shared/ui.actions'
+import * as ui from '../../shared/ui.actions'
 import { Subscription } from 'rxjs';
 
 

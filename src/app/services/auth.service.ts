@@ -7,13 +7,22 @@ import { AngularFirestore } from '@angular/fire/firestore';
 import { map } from 'rxjs/operators';
 import { Usuario } from '../models/usuario.model';
 import { Store } from '@ngrx/store';
-import * as authActions from '../components/auth/auth.actions';
+import * as authActions from '../auth/auth.actions';
+import * as ingresoEgresoActions from '../ingreso-egreso/ingreso-egreso.action';
+import { Subscription } from 'rxjs';
 
 
 @Injectable({
   providedIn: 'root'
 })
 export class AuthService {
+
+  userSubsciption: Subscription;
+  private _user: Usuario;
+
+  get user(){
+    return {...this._user};
+  }
 
   constructor( public auth: AngularFireAuth,
               private firestore: AngularFirestore,
@@ -22,21 +31,22 @@ export class AuthService {
 initAuthListener() {
 
 this.auth.authState.subscribe( fuser => {
-    //console.log( fuser?.uid );
     if( fuser ){
-      this.firestore.doc(`${ fuser.uid }/usuario`).valueChanges().subscribe( (firestoreUser:any) => {
+     this.userSubsciption = this.firestore.doc(`${ fuser.uid }/usuario`).valueChanges().subscribe( (firestoreUser:any) => {
 
         const user = Usuario.fromFirebase( firestoreUser );
-      
+        this._user = user;
         this.store.dispatch( authActions.setUser({ user  }) );
       })
     }
     else {
+      this._user = null;
+      this.userSubsciption.unsubscribe(); 
       this.store.dispatch( authActions.unsetUser() );
-    }
+      //Cada vez que cierre sesión se van a borrar los items
+      this.store.dispatch( ingresoEgresoActions.unSetItems());
+    }   
     
-   
-
 })
 
 }

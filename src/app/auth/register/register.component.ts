@@ -8,7 +8,7 @@ import { Store } from '@ngrx/store';
 import { AppState } from 'src/app/app.reducer';
 import { Subscription } from 'rxjs';
 
-import * as ui from '../../../shared/ui.actions'
+import * as ui from '../../shared/ui.actions'
 
 @Component({
   selector: 'app-register',
